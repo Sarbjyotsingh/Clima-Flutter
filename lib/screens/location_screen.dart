@@ -17,6 +17,7 @@ class _LocationScreenState extends State<LocationScreen> {
   String weatherIcon;
   String cityName;
   String weatherMessage;
+
   @override
   void initState() {
     super.initState();
@@ -114,23 +115,6 @@ class _LocationScreenState extends State<LocationScreen> {
           ).show()) ??
           false;
     }
-//    showDialog(
-//      context: context,
-//      builder: (context) => new AlertDialog(
-//        title: new Text('Are you sure?'),
-//        content: new Text('Do you want to exit an App'),
-//        actions: <Widget>[
-//          new FlatButton(
-//            onPressed: () => Navigator.of(context).pop(false),
-//            child: new Text('No'),
-//          ),
-//          new FlatButton(
-//            onPressed: () => Navigator.of(context).pop(true),
-//            child: new Text('Yes'),
-//          ),
-//        ],
-//      ),
-//    )
 
     return WillPopScope(
       onWillPop: _onWillPop,
@@ -203,36 +187,4 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
     );
   }
-
-//    Alert(
-//      context: context,
-//      type: AlertType.warning,
-//      title: "",
-//      desc: "Do you want to Exit this App?",
-//      buttons: [
-//        DialogButton(
-//          child: Text(
-//            "Yes",
-//            style: TextStyle(color: Colors.white, fontSize: 20),
-//          ),
-//          onPressed: () => Navigator.pushReplacement(context,
-//              MaterialPageRoute(builder: (context) {
-//            return LocationScreen();
-//          })),
-//          color: Color.fromRGBO(0, 179, 134, 1.0),
-//        ),
-//        DialogButton(
-//          child: Text(
-//            'No',
-//            style: TextStyle(color: Colors.white, fontSize: 20),
-//          ),
-//          onPressed: () => Navigator.pop(context),
-//          gradient: LinearGradient(colors: [
-//            Color.fromRGBO(116, 116, 191, 1.0),
-//            Color.fromRGBO(52, 138, 199, 1.0)
-//          ]),
-//        )
-//      ],
-//    ).show();
-
 }
