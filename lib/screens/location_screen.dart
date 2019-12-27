@@ -84,72 +84,155 @@ class _LocationScreenState extends State<LocationScreen> {
       }
     }
 
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/location_background.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-                Colors.white.withOpacity(0.8), BlendMode.dstATop),
-          ),
-        ),
-        constraints: BoxConstraints.expand(),
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  FlatButton(
-                    onPressed: () async {
-                      var weatherData =
-                          await WeatherModel().getLocationWeather();
-                      updateUI(weatherData);
-                    },
-                    child: Icon(
-                      Icons.near_me,
-                      size: 50.0,
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: getCityData,
-                    child: Icon(
-                      Icons.location_city,
-                      size: 50.0,
-                    ),
-                  ),
-                ],
+    Future<bool> _onWillPop() async {
+      return (await Alert(
+            context: context,
+            type: AlertType.warning,
+            title: "",
+            desc: "Do you want to Exit this App?",
+            buttons: [
+              DialogButton(
+                child: Text(
+                  "Yes",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                onPressed: () => Navigator.of(context).pop(true),
+                color: Color.fromRGBO(0, 179, 134, 1.0),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.0),
-                child: Row(
+              DialogButton(
+                child: Text(
+                  'No',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                onPressed: () => Navigator.of(context).pop(false),
+                gradient: LinearGradient(colors: [
+                  Color.fromRGBO(116, 116, 191, 1.0),
+                  Color.fromRGBO(52, 138, 199, 1.0)
+                ]),
+              )
+            ],
+          ).show()) ??
+          false;
+    }
+//    showDialog(
+//      context: context,
+//      builder: (context) => new AlertDialog(
+//        title: new Text('Are you sure?'),
+//        content: new Text('Do you want to exit an App'),
+//        actions: <Widget>[
+//          new FlatButton(
+//            onPressed: () => Navigator.of(context).pop(false),
+//            child: new Text('No'),
+//          ),
+//          new FlatButton(
+//            onPressed: () => Navigator.of(context).pop(true),
+//            child: new Text('Yes'),
+//          ),
+//        ],
+//      ),
+//    )
+
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/location_background.jpg'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                  Colors.white.withOpacity(0.8), BlendMode.dstATop),
+            ),
+          ),
+          constraints: BoxConstraints.expand(),
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
-                      '$temperature°',
-                      style: kTempTextStyle,
+                    FlatButton(
+                      onPressed: () async {
+                        var weatherData =
+                            await WeatherModel().getLocationWeather();
+                        updateUI(weatherData);
+                      },
+                      child: Icon(
+                        Icons.near_me,
+                        size: 50.0,
+                      ),
                     ),
-                    Text(
-                      weatherIcon,
-                      style: kConditionTextStyle,
+                    FlatButton(
+                      onPressed: getCityData,
+                      child: Icon(
+                        Icons.location_city,
+                        size: 50.0,
+                      ),
                     ),
                   ],
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: 15.0),
-                child: Text(
-                  '$weatherMessage in $cityName',
-                  textAlign: TextAlign.right,
-                  style: kMessageTextStyle,
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        '$temperature°',
+                        style: kTempTextStyle,
+                      ),
+                      Text(
+                        weatherIcon,
+                        style: kConditionTextStyle,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: EdgeInsets.only(right: 15.0),
+                  child: Text(
+                    '$weatherMessage in $cityName',
+                    textAlign: TextAlign.right,
+                    style: kMessageTextStyle,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
+//    Alert(
+//      context: context,
+//      type: AlertType.warning,
+//      title: "",
+//      desc: "Do you want to Exit this App?",
+//      buttons: [
+//        DialogButton(
+//          child: Text(
+//            "Yes",
+//            style: TextStyle(color: Colors.white, fontSize: 20),
+//          ),
+//          onPressed: () => Navigator.pushReplacement(context,
+//              MaterialPageRoute(builder: (context) {
+//            return LocationScreen();
+//          })),
+//          color: Color.fromRGBO(0, 179, 134, 1.0),
+//        ),
+//        DialogButton(
+//          child: Text(
+//            'No',
+//            style: TextStyle(color: Colors.white, fontSize: 20),
+//          ),
+//          onPressed: () => Navigator.pop(context),
+//          gradient: LinearGradient(colors: [
+//            Color.fromRGBO(116, 116, 191, 1.0),
+//            Color.fromRGBO(52, 138, 199, 1.0)
+//          ]),
+//        )
+//      ],
+//    ).show();
+
 }

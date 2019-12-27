@@ -1,3 +1,4 @@
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:clima/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +9,14 @@ class CityScreen extends StatefulWidget {
 
 class _CityScreenState extends State<CityScreen> {
   String cityName;
-
+  AutoCompleteTextField autoCompleteTextField =
+      new AutoCompleteTextField<String>(
+          itemSubmitted: null,
+          key: null,
+          suggestions: null,
+          itemBuilder: null,
+          itemSorter: null,
+          itemFilter: null);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
