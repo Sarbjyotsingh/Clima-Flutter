@@ -8,6 +8,7 @@ class CityScreen extends StatefulWidget {
 
 class _CityScreenState extends State<CityScreen> {
   String cityName;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +40,9 @@ class _CityScreenState extends State<CityScreen> {
                 child: TextField(
                   onChanged: (value) {
                     cityName = value;
+                  },
+                  onSubmitted: (String value) {
+                    Navigator.pop(context, value);
                   },
                   style: TextStyle(
                     color: Colors.black,

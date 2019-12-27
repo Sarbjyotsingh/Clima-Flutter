@@ -54,31 +54,33 @@ class _LocationScreenState extends State<LocationScreen> {
       if (typedName != null) {
         var weatherData = await weatherModel.getCityWeather(typedName);
         updateUI(weatherData);
-        Alert(
-          style: kAlertStyle,
-          context: context,
-          title: "Error",
-          desc: "City Not Found",
-          image: Image.asset(
-            "images/alert.png",
-            height: 100,
-            width: 100,
-          ),
-          buttons: [
-            DialogButton(
-              child: Text(
-                "CANCEL",
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-                getCityData();
-              },
-              color: Colors.blueGrey,
-              radius: BorderRadius.circular(0.0),
+        if (weatherData == 404) {
+          Alert(
+            style: kAlertStyle,
+            context: context,
+            title: "Error",
+            desc: "City Not Found",
+            image: Image.asset(
+              "images/alert.png",
+              height: 100,
+              width: 100,
             ),
-          ],
-        ).show();
+            buttons: [
+              DialogButton(
+                child: Text(
+                  "CANCEL",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  getCityData();
+                },
+                color: Colors.blueGrey,
+                radius: BorderRadius.circular(0.0),
+              ),
+            ],
+          ).show();
+        }
       }
     }
 
