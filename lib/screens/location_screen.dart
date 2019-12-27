@@ -2,6 +2,7 @@ import 'package:clima/screens/city_screen.dart';
 import 'package:clima/services/weather.dart';
 import 'package:clima/utilities/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class LocationScreen extends StatefulWidget {
   LocationScreen({this.locationWeather});
@@ -24,23 +25,63 @@ class _LocationScreenState extends State<LocationScreen> {
 
   void updateUI(dynamic weatherData) {
     setState(() {
-      if (weatherData == null) {
+      try {
+        temperature = weatherData['main']['temp'].toInt();
+        weatherMessage = weatherModel.getMessage(temperature);
+        var condition = weatherData['weather'][0]['id'];
+        weatherIcon = weatherModel.getWeatherIcon(condition);
+        cityName = weatherData['name'];
+      } catch (e) {
         temperature = 0;
         weatherIcon = 'Error';
         weatherMessage = 'Unable to get weather data';
         cityName = '';
-        return;
       }
-      temperature = weatherData['main']['temp'].toInt();
-      weatherMessage = weatherModel.getMessage(temperature);
-      var condition = weatherData['weather'][0]['id'];
-      weatherIcon = weatherModel.getWeatherIcon(condition);
-      cityName = weatherData['name'];
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    void getCityData() async {
+      var typedName = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return CityScreen();
+          },
+        ),
+      );
+      if (typedName != null) {
+        var weatherData = await weatherModel.getCityWeather(typedName);
+        updateUI(weatherData);
+        Alert(
+          style: kAlertStyle,
+          context: context,
+          title: "Error",
+          desc: "City Not Found",
+          image: Image.asset(
+            "images/alert.png",
+            height: 100,
+            width: 100,
+          ),
+          buttons: [
+            DialogButton(
+              child: Text(
+                "CANCEL",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                getCityData();
+              },
+              color: Colors.blueGrey,
+              radius: BorderRadius.circular(0.0),
+            ),
+          ],
+        ).show();
+      }
+    }
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -72,21 +113,7 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   FlatButton(
-                    onPressed: () async {
-                      var typedName = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return CityScreen();
-                          },
-                        ),
-                      );
-                      if (typedName != null) {
-                        var weatherData =
-                            await weatherModel.getCityWeather(typedName);
-                        updateUI(weatherData);
-                      }
-                    },
+                    onPressed: getCityData,
                     child: Icon(
                       Icons.location_city,
                       size: 50.0,
